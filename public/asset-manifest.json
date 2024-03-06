@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.27941d25.css",
+    "main.js": "/static/js/main.fc1d2e12.js",
+    "static/js/787.dc9f6b51.chunk.js": "/static/js/787.dc9f6b51.chunk.js",
+    "static/media/p4.jpg": "/static/media/p4.e2c4d7021dcf6d004b1a.jpg",
+    "static/media/p6.jpg": "/static/media/p6.e1d201bd3150f42cbe5b.jpg",
+    "static/media/baking.png": "/static/media/baking.2025eebfc7e55e9f1f2c.png",
+    "static/media/bioinformatics.jpg": "/static/media/bioinformatics.9fb262d330cfcf28c892.jpg",
+    "static/media/bank.jpg": "/static/media/bank.6f692e1fddb887c0fd03.jpg",
+    "static/media/vacation.jpg": "/static/media/vacation.af254a36db30783142b6.jpg",
+    "static/media/p1.jpg": "/static/media/p1.66994e2c4f1a65aa85e7.jpg",
+    "static/media/p3.jpg": "/static/media/p3.da9408f8ad8085797122.jpg",
+    "static/media/p2.jpg": "/static/media/p2.4bd139162c088497a572.jpg",
+    "static/media/p5.jpg": "/static/media/p5.d141941f8c60d2c5e969.jpg",
+    "static/media/yoga.jpg": "/static/media/yoga.02b3f809d220eb767f51.jpg",
+    "static/media/defaultProfilePhoto.jpg": "/static/media/defaultProfilePhoto.b395d9ae34805c00a52e.jpg",
+    "static/media/logo.svg": "/static/media/logo.b870694d1f7ec4a5206cc9f24a3b8699.svg",
+    "index.html": "/index.html",
+    "main.27941d25.css.map": "/static/css/main.27941d25.css.map",
+    "main.fc1d2e12.js.map": "/static/js/main.fc1d2e12.js.map",
+    "787.dc9f6b51.chunk.js.map": "/static/js/787.dc9f6b51.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.27941d25.css",
+    "static/js/main.fc1d2e12.js"
+  ]
+}
