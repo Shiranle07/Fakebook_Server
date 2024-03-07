@@ -8,38 +8,46 @@ const getPosts= async(_, res) => {
     res.json(await postService.getPosts());
 };
 
-const getPostById= async(req, res) => {
-    const post = await postService.getPostById(req.params.id);
-    if (!post){
-        return res.status(404).json({errors: {'Post not found'}});
+
+const getPostById = async (req, res) => {
+    try {
+        const post = await postService.getPostById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ errors: ['Post not found'] });
+        }
+        res.json(post);
+    } catch (error) {
+        console.error("Error retrieving post:", error);
+        res.status(500).json({ errors: ['Server error'] });
     }
-    res.json(post);
 };
 
-const editPost= async(req, res) => {
-    try{
+
+const editPost = async (req, res) => {
+    try {
         const post = await postService.editPost(req.params.id, req.body.postBody);
-        if (!post){
-            return res.status(404).json({errors: {'Post not found'}});
+        if (!post) {
+            return res.status(404).json({ errors: ['Post not found'] });
         }
         res.json(post);
+    } catch (error) {
+        console.error("Error editing post:", error);
+        res.status(500).json({ errors: ['Server error'] });
     }
-    catch{
-        return res.status(404).json({errors: {'Post not found'}});
-    } 
 };
 
-const deletePost= async(req, res) => {
-    try{
-        const post = await postService.deletePost(req.params.id, req.body.postBody);
-        if (!post){
-            return res.status(404).json({errors: {'Post not found'}});
+const deletePost = async (req, res) => {
+    try {
+        const post = await postService.deletePost(req.params.id);
+        if (!post) {
+            return res.status(404).json({ errors: ['Post not found'] });
         }
         res.json(post);
+    } catch (error) {
+        console.error("Error deleting post:", error);
+        res.status(500).json({ errors: ['Server error'] });
     }
-    catch{
-        return res.status(404).json({errors: {'Post not found'}});
-    } 
 };
+
 
 module.exports = {addPost, getPosts, getPostById, editPost, deletePost};
