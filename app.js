@@ -6,12 +6,14 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 
+
 // Parse incoming requests with URL-encoded payloads
 app.use(express.urlencoded({ extended: true }));
 
 // Use a library to perform the cryptographic operations
 const jwt = require("jsonwebtoken");
 const key = "Fakebook.Fakebook.Fakebook super key";    
+
 
 const cors = require('cors'); 
 app.use(cors());
@@ -30,6 +32,10 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 
 const posts = require('./routes/post');
 app.use('/feed', posts);
+
+
+const users = require('./routes/user');
+app.use('/users', users);
 
 // Middleware for JWT authentication
 const isLoggedIn = (req, res, next) => {

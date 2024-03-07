@@ -1,10 +1,12 @@
 const Post = require('../models/post');
 
 const addPost = async(body, photo) => {
-    const post = new Post({postBody: body, time: time});
+    const post = new Post({postBody: body});
+
     if (photo) post.postPhoto = photo;
     return await post.save();
 }
+
 
 const getPosts = async() => {
    return await Post.find({});
@@ -34,3 +36,4 @@ const deletePost = async(id) => {
 };
 
 module.exports = {addPost, getPosts, getPostById, deletePost, editPost};
+
