@@ -6,10 +6,12 @@ const Post = new Schema({
         type: String,
         required: true
     },
-    // postPhoto: {
-    //     type: BigInt64Array,
-    //     required: false
-    // },
+
+    postPhoto: {
+        type: String,
+        required: false
+    },
+
     time: {
         type: Date,
         default: Date.now
