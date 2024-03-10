@@ -33,9 +33,11 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 const posts = require('./routes/post');
 app.use('/feed', posts);
 
-
 const users = require('./routes/user');
 app.use('/users', users);
+
+const token = require('./routes/token');
+app.use('/token', token);
 
 // Middleware for JWT authentication
 const isLoggedIn = (req, res, next) => {
