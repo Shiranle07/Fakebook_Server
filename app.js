@@ -33,7 +33,6 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 const posts = require('./routes/post');
 app.use('/feed', posts);
 
-
 const users = require('./routes/user');
 app.use('/users', users);
 
