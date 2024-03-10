@@ -1,14 +1,13 @@
-const token = require("../services/token");
-const user = require("../services/user");
+const tokenService = require("../services/token");
+const userService = require("../services/user");
 
 const login = async (req, res) => {
-    const { username, password } = req.body;
-    const user = await user.authenticateUser(username, password);
+    const user = await userService.authenticateUser(req.body.email, req.body.password);
     if (user) {
-        const token = await token.generateToken(user._id);
-        res.json({ token });
+        const token = await tokenService.generateToken(user.email);
+        res.status(201).json({ user, token });
     } else {
-        res.status(401).json({ error: 'Invalid credentials' });
+        res.status(404).send('Invalid username and/or password');
     }
 };
 

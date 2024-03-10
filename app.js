@@ -37,7 +37,7 @@ const users = require('./routes/user');
 app.use('/users', users);
 
 const token = require('./routes/token');
-app.use('/token', token);
+app.use('/tokens', token);
 
 // Middleware for JWT authentication
 const isLoggedIn = (req, res, next) => {
