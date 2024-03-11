@@ -1,8 +1,9 @@
 const Post = require('../models/post');
+const User = require('../models/user');
 
-const addPost = async(body, photo) => {
-    const post = new Post({postBody: body});
-
+const addPost = async(email, body, photo) => {
+    const user = await User.findOne({ email });
+    const post = new Post({user_firstName: user.firstName, user_lastName: user.lastName, postBody: body});
     if (photo) post.postPhoto = photo;
     return await post.save();
 }
@@ -36,4 +37,3 @@ const deletePost = async(id) => {
 };
 
 module.exports = {addPost, getPosts, getPostById, deletePost, editPost};
-

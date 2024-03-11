@@ -37,27 +37,6 @@ const users = require('./routes/user');
 app.use('/users', users);
 
 const token = require('./routes/token');
-app.use('/token', token);
-
-// Middleware for JWT authentication
-const isLoggedIn = (req, res, next) => {
-        // If the request has an authorization header
-        if (req.headers.authorization) {
-            // Extract the token from the header
-            const token = req.headers.authorization.split(" ")[1];
-            try {
-                // Verify the token is valid
-                const data = jwt.verify(token, key);
-                console.log('The logged in user is: ' + data.username);
-                // Token validation was successful. Continue to the next middleware
-                return next();
-            } catch (err) {
-                return res.status(401).send("Invalid Token");
-            }
-        } else {
-            // If no authorization header is present, send a 403 Forbidden response
-            return res.status(403).send('Token required');
-        }
-    };
+app.use('/tokens', token);
 
 app.listen(process.env.PORT);

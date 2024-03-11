@@ -22,13 +22,11 @@ const authenticateUser = async (email, password) => {
     }
 
     // Compare the provided password with the hashed password stored in the database
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-        return null; // Password doesn't match
+    if (password == user.password) {
+        return user; 
     }
 
-    // Return the authenticated user
-    return user;
+    return null;
 };
 
 module.exports = { addUser, authenticateUser };
