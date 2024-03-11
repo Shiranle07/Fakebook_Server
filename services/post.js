@@ -9,9 +9,9 @@ const addPost = async(email, body, photo) => {
 }
 
 
-const getPosts = async() => {
-   return await Post.find({});
-}
+const getPosts = async () => {
+    return await Post.find({}).sort({ publication_date: -1 });
+};
 
 const getPostById = async(id) => {
     return await Post.findById(id);

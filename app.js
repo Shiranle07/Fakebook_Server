@@ -31,12 +31,12 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 });
 
 const posts = require('./routes/post');
-app.use('/feed', posts);
+app.use('/api/posts', posts);
 
 const users = require('./routes/user');
-app.use('/users', users);
+app.use('/api/users', users);
 
 const token = require('./routes/token');
-app.use('/tokens', token);
+app.use('/api/tokens', token);
 
 app.listen(process.env.PORT);
