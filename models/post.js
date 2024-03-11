@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 const Post = new Schema({
+    user_email: {
+        type: String,
+        required: true
+    },
     user_firstName: {
         type: String,
         required: true
