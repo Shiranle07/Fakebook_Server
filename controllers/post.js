@@ -25,10 +25,19 @@ const getPostById = async (req, res) => {
     }
 };
 
-
 const editPost = async (req, res) => {
     try {
-        const post = await postService.editPost(req.params.id, req.body.postBody);
+        // Extract token from authorization header
+        const token = req.headers.authorization.split(" ")[1];
+        // Verify the token and extract the data
+        const data = jwt.verify(token, "keyyy");
+        // Now data contains the decoded token payload, including the email
+        const userEmail = data.userEmail;
+        // Call editPost service method with extracted email and other parameters
+        const post = await postService.editPost(req.params.id, req.body.postBody, userEmail);
+
+        if(userEmail != req.body.user_email) return res.status(404).json({ errors: ['It is not your Post!'] });
+
         if (!post) {
             return res.status(404).json({ errors: ['Post not found'] });
         }
@@ -39,9 +48,20 @@ const editPost = async (req, res) => {
     }
 };
 
+
 const deletePost = async (req, res) => {
     try {
-        const post = await postService.deletePost(req.params.id);
+        // Extract token from authorization header
+        const token = req.headers.authorization.split(" ")[1];
+        // Verify the token and extract the data
+        const data = jwt.verify(token, "keyyy");
+        // Now data contains the decoded token payload, including the email
+        const userEmail = data.userEmail;
+        // Call deletePost service method with extracted email and other parameters
+        const post = await postService.deletePost(req.params.id, userEmail);
+        
+        if(userEmail != req.body.user_email) return res.status(404).json({ errors: ['It is not your Post!'] });
+
         if (!post) {
             return res.status(404).json({ errors: ['Post not found'] });
         }
@@ -51,6 +71,7 @@ const deletePost = async (req, res) => {
         res.status(500).json({ errors: ['Server error'] });
     }
 };
+
 
 
 module.exports = {addPost, getPosts, getPostById, editPost, deletePost};

@@ -37,4 +37,3 @@ const deletePost = async(id) => {
 };
 
 module.exports = {addPost, getPosts, getPostById, deletePost, editPost};
-

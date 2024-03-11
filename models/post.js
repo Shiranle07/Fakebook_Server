@@ -4,6 +4,10 @@ const { formatDistanceToNow } = require('date-fns');
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
+      user_email: {
+        type: String,
+        required: true
+    },
     user_firstName: {
         type: String,
         required: true
@@ -12,6 +16,10 @@ const PostSchema = new Schema({
         type: String,
         required: true
     },
+    // user_photo: {
+    //     type: String,
+    //     required: true
+    // },
     postBody: {
         type: String,
         required: true
@@ -31,8 +39,8 @@ const PostSchema = new Schema({
     comments: {
         type: Array,
         default: []
-    }
-}, { collection: 'posts' });
+
+    }}, { collection: 'posts' });
 
 // Define a virtual property to format the distance to now
 PostSchema.virtual('publication_date_formatted').get(function() {
