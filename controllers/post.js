@@ -1,7 +1,10 @@
 const postService = require("../services/post");
+const jwt = require("jsonwebtoken");
 
 const addPost= async(req, res) => {
-    res.json(await postService.addPost(req.body.postBody, req.body.postPhoto));
+    const token = req.headers.authorization.split(" ")[1];
+    const data = jwt.verify(token, "keyyy");
+    res.json(await postService.addPost(data.userEmail, req.body.postBody, req.body.postPhoto));
 };
 
 const getPosts= async(_, res) => {

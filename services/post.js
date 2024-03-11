@@ -1,16 +1,17 @@
 const Post = require('../models/post');
+const User = require('../models/user');
 
-const addPost = async(body, photo) => {
-    const post = new Post({postBody: body});
-
+const addPost = async(email, body, photo) => {
+    const user = await User.findOne({ email });
+    const post = new Post({user_firstName: user.firstName, user_lastName: user.lastName, postBody: body});
     if (photo) post.postPhoto = photo;
     return await post.save();
 }
 
 
-const getPosts = async() => {
-   return await Post.find({});
-}
+const getPosts = async () => {
+    return await Post.find({}).sort({ publication_date: -1 });
+};
 
 const getPostById = async(id) => {
     return await Post.findById(id);

@@ -1,9 +1,10 @@
 const Token = require('../models/token');
+const jwt = require("jsonwebtoken");
 
-const generateToken = async (userId) => {
-    const token = jwt.sign({ userId }, key);
-    const newToken = new Token({ token, userId });
-    await newToken.save();
+const generateToken = async (userEmail) => {
+    const token = jwt.sign({ userEmail }, "keyyy");
+    // const newToken = new Token({ token, userEmail });
+    // await newToken.save();
     return token;
 }
 
