@@ -29,4 +29,14 @@ const authenticateUser = async (email, password) => {
     return null;
 };
 
-module.exports = { addUser, authenticateUser };
+const getUser = async (email) => {
+    console.log("email from server:", email)
+    const user = await User.findOne({ email });
+    console.log("user from server:", user)
+    if(user){
+        return user;
+    }
+    return null;
+}
+
+module.exports = { addUser, authenticateUser, getUser };

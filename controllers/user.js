@@ -9,4 +9,12 @@ const addUser= async(req, res) => {
     else res.status(409).json({ error: "Email already exists" })
 };
 
-module.exports = {addUser};
+const getUser = async(req, res) => {
+    console.log(req.params.id)
+    const response = await userService.getUser(req.params.id);
+    if(response){
+        res.json(response)
+    }
+};
+
+module.exports = {addUser, getUser};
