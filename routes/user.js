@@ -11,6 +11,9 @@ router.route('/')
 router.route('/friend-request')
     .post(userController.sendFriendRequest);
 
+router.route('/friend-rejectRequest')
+    .post(userController.rejectFriendRequest);
+
 router.route('/:id/friends/:fid')
    .patch(userController.acceptFriendRequest)
    .delete(userController.deleteFriend);

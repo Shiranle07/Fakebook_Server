@@ -24,6 +24,20 @@ const sendFriendRequest = async (req, res) => {
     }
 };
 
+const rejectFriendRequest = async (req, res) => {
+    const receiverEmail = req.body.receiverEmail;
+    const senderEmail = req.body.senderEmail;
+
+    const response = await userService.rejectFriendRequest(receiverEmail, senderEmail);
+
+    if (response) {
+        res.json(response);
+    } else {
+        res.status(400).json({ error: "Failed to reject friend request" });
+    }
+
+};
+
 const acceptFriendRequest = async (req, res) => {
     const receiverEmail = req.body.receiverEmail;
     const senderEmail = req.body.senderEmail;
@@ -55,4 +69,4 @@ const deleteFriend = async(req, res) => {
     }
 };
 
-module.exports = { addUser, sendFriendRequest, acceptFriendRequest, deleteFriend };
+module.exports = { addUser, sendFriendRequest, acceptFriendRequest, deleteFriend, rejectFriendRequest };

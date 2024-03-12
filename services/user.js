@@ -56,6 +56,30 @@ const sendFriendRequest = async (senderEmail, receiverEmail) => {
     return { sender, receiver }; // Return sender and receiver information
 };
 
+const rejectFriendRequest = async (receiverEmail, senderEmail) => {
+    const receiver = await User.findOne({ email: receiverEmail });
+    const sender = await User.findOne({ email: senderEmail });
+
+    if (!receiver || !sender) {
+        return null; // Sender or receiver not found
+    }
+
+    if (!receiver.friend_reqs_received.includes(sender.email)) {
+        return null; // No friend request found from sender
+    }
+
+    // Remove sender from receiver's friend requests received list
+    receiver.friend_reqs_received = receiver.friend_reqs_received.filter(requesterId => requesterId.toString() !== sender.email.toString());
+
+    // Remove receiver from sender's friend requests sent list
+    sender.friend_reqs_sent = sender.friend_reqs_sent.filter(receiverId => receiverId.toString() !== receiver.email.toString());
+
+    await sender.save();
+    await receiver.save();
+
+    return { sender, receiver }; // Return sender and receiver information
+};
+
 const acceptFriendRequest = async (receiverEmail, senderEmail) => {
     const receiver = await User.findOne({ email: receiverEmail });
     const sender = await User.findOne({ email: senderEmail });
@@ -109,4 +133,4 @@ const deleteFriend = async (receiverEmail, senderEmail) => {
 
 };
 
-module.exports = { addUser, authenticateUser, sendFriendRequest, acceptFriendRequest, deleteFriend };
+module.exports = { addUser, authenticateUser, sendFriendRequest, acceptFriendRequest, deleteFriend, rejectFriendRequest };
