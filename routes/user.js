@@ -18,8 +18,10 @@ router.route('/:id/friends/:fid')
    .patch(userController.acceptFriendRequest)
    .delete(userController.deleteFriend);
 
-// router.route('/friend-request/accept')
-//     .post(userController.acceptFriendRequest);
+router.route('/users/:id')
+    .get(userController.getUserById)
+    .patch(userController.updateUser)
+    .delete(userController.deleteUser);
 
 
 module.exports = router;
