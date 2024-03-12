@@ -10,7 +10,6 @@ const addUser= async(req, res) => {
 };
 
 const getUser = async(req, res) => {
-    console.log(req.params.id)
     const response = await userService.getUser(req.params.id);
     if(response){
         res.json(response)
