@@ -51,7 +51,6 @@ const authenticateUser = async (email, password) => {
 };
 
 const getUserByEmail = async (email) => {
-    console.log("searching...", email)
     const user = await User.findOne({ email });
     if(user){
         return user;
