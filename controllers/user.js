@@ -1,5 +1,5 @@
 // controllers/user file
-
+const jwt = require("jsonwebtoken");
 const userService = require("../services/user");
 
 const addUser= async(req, res) => {
@@ -18,10 +18,10 @@ const getUserByEmail = async (req, res) => {
         // Verify the token and extract the data
         const data = jwt.verify(token, "keyyy");
         // Extract the email of the requesting user from the token payload
-        const requestingUserEmail = data.email;
+        const requestingUserEmail = data.userEmail;
 
         // Extract requested user's email from the request parameters
-        const requestedUserEmail = req.params.email;
+        const requestedUserEmail = req.params.id;
 
         // Fetch the requested user's details
         const requestedUser = await userService.getUserByEmail(requestedUserEmail);
@@ -42,17 +42,17 @@ const getUserByEmail = async (req, res) => {
         let status;
 
         if (requestingUserEmail == requestedUserEmail) {
-            status = 200;
+            status = "user";
         } else if (areFriends){
-            status = 201;
+            status = "Friends";
         } else if (friendRequestSent) {
-            status = 202;
+            status = 'Requested';
         } else if (friendRequestReceived) {
-            status = 203;
+            status = 'Confirm';
         } else {
-            status = 204;
+            status = 'Add friend';
         }
-        return res.status(status).json({ user: requestedUser, status });
+        return res.json({ user: requestedUser, status });
     } catch (error) {
         console.error("Error retrieving user:", error);
         res.status(500).json({ errors: ['Server error'] });
