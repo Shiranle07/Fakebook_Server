@@ -11,13 +11,45 @@ const addUser= async(req, res) => {
     else res.status(409).json({ error: "Email already exists" })
 };
 
-const getUserById= async(req, res) => {
+const getUserByEmail = async (req, res) => {
     try {
-        const user = await userService.getUserById(req.params.id);
-        if (!user) {
+        // Extract user's email from the JWT token
+        const requestingUserEmail = req.user.email;
+
+        // Extract requested user's email from the request parameters
+        const requestedUserEmail = req.params.email;
+
+        // Fetch the requested user's details
+        const requestedUser = await userService.getUserByEmail(requestedUserEmail);
+
+        if (!requestedUser) {
             return res.status(404).json({ errors: ['User not found'] });
         }
-        res.json(user);
+
+        // Check if requesting user is friends with the requested user
+        const areFriends = requestedUser.friends.includes(requestingUserEmail);
+
+        // Check if requesting user has sent a friend request to the requested user
+        const friendRequestSent = requestedUser.friend_reqs_received.includes(requestingUserEmail);
+
+        // Check if requesting user has received a friend request from the requested user
+        const friendRequestReceived = requestedUser.friend_reqs_sent.includes(requestingUserEmail);
+
+        let status;
+
+        if (requestingUserEmail == requestedUserEmail) {
+            status = 200;
+        } else if (areFriends){
+            status = 201;
+        } else if (friendRequestSent) {
+            status = 202;
+        } else if (friendRequestReceived) {
+            status = 203;
+        } else {
+            status = 204;
+        }
+
+        return res.status(status).json({ user: requestedUser, status });
     } catch (error) {
         console.error("Error retrieving user:", error);
         res.status(500).json({ errors: ['Server error'] });
@@ -31,11 +63,11 @@ const updateUser = async (req, res) => {
         // Verify the token and extract the data
         const data = jwt.verify(token, "keyyy");
         // Now data contains the decoded token payload, including the email
-        const userEmail = data.userEmail;
+        const requested_user = data.requested_user;
         // Call updateUser service method with extracted email and other parameters
-        const user = await userService.updateUser(req.params.id, req.body.userBody, userEmail);
+        const user = await userService.updateUser(req.params.id, req.body.userBody, requested_user);
 
-        if(userEmail != req.body.user_email) return res.status(404).json({ errors: ['It is not your user!'] });
+        if(requested_user != req.body.user_email) return res.status(404).json({ errors: ['It is not your user!'] });
 
         if (!user) {
             return res.status(404).json({ errors: ['User not found'] });
@@ -54,11 +86,11 @@ const deleteUser = async (req, res) => {
         // Verify the token and extract the data
         const data = jwt.verify(token, "keyyy");
         // Now data contains the decoded token payload, including the email
-        const userEmail = data.userEmail;
+        const requested_user = data.requested_user;
         // Call deleteUser service method with extracted email and other parameters
-        const user = await userService.deleteUser(req.params.id, userEmail);
+        const user = await userService.deleteUser(req.params.id, requested_user);
         
-        if(userEmail != req.body.user_email) return res.status(404).json({ errors: ['It is not your user!'] });
+        if(requested_user != req.body.user_email) return res.status(404).json({ errors: ['It is not your user!'] });
 
         if (!user) {
             return res.status(404).json({ errors: ['User not found'] });
@@ -71,6 +103,14 @@ const deleteUser = async (req, res) => {
 };
 
 const sendFriendRequest = async (req, res) => {
+    // Extract token from authorization header
+    const token = req.headers.authorization.split(" ")[1];
+    // Verify the token and extract the data
+    const data = jwt.verify(token, "keyyy");
+    // Now data contains the decoded token payload, including the email
+    const requested_user = data.requested_user;
+    console.log("user requested:", requested_user)
+
     const senderEmail = req.body.senderEmail;
     const receiverEmail = req.body.receiverEmail;
 
@@ -84,6 +124,14 @@ const sendFriendRequest = async (req, res) => {
 };
 
 const rejectFriendRequest = async (req, res) => {
+    // Extract token from authorization header
+    const token = req.headers.authorization.split(" ")[1];
+    // Verify the token and extract the data
+    const data = jwt.verify(token, "keyyy");
+    // Now data contains the decoded token payload, including the email
+    const requested_user = data.requested_user;
+    console.log("user requested:", requested_user)
+
     const receiverEmail = req.body.receiverEmail;
     const senderEmail = req.body.senderEmail;
 
@@ -98,6 +146,14 @@ const rejectFriendRequest = async (req, res) => {
 };
 
 const acceptFriendRequest = async (req, res) => {
+    // Extract token from authorization header
+    const token = req.headers.authorization.split(" ")[1];
+    // Verify the token and extract the data
+    const data = jwt.verify(token, "keyyy");
+    // Now data contains the decoded token payload, including the email
+    const requested_user = data.requested_user;
+    console.log("user requested:", requested_user)
+
     const receiverEmail = req.body.receiverEmail;
     const senderEmail = req.body.senderEmail;
 
@@ -111,6 +167,14 @@ const acceptFriendRequest = async (req, res) => {
 };
 
 const deleteFriend = async(req, res) => {
+    // Extract token from authorization header
+    const token = req.headers.authorization.split(" ")[1];
+    // Verify the token and extract the data
+    const data = jwt.verify(token, "keyyy");
+    // Now data contains the decoded token payload, including the email
+    const requested_user = data.requested_user;
+    console.log("user requested:", requested_user)
+    
     const deleterEmail = req.body.deleterEmail;
     const deletedEmail = req.body.deletedEmail;
     
@@ -128,4 +192,4 @@ const deleteFriend = async(req, res) => {
     }
 };
 
-module.exports = { addUser, sendFriendRequest, acceptFriendRequest, deleteFriend, rejectFriendRequest, getUserById, updateUser, deleteUser };
+module.exports = { addUser, sendFriendRequest, acceptFriendRequest, deleteFriend, rejectFriendRequest, getUserByEmail, updateUser, deleteUser };
