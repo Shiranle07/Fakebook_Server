@@ -13,8 +13,12 @@ const addUser= async(req, res) => {
 
 const getUserByEmail = async (req, res) => {
     try {
-        // Extract user's email from the JWT token
-        const requestingUserEmail = req.user.email;
+        // Extract token from authorization header
+        const token = req.headers.authorization.split(" ")[1];
+        // Verify the token and extract the data
+        const data = jwt.verify(token, "keyyy");
+        // Extract the email of the requesting user from the token payload
+        const requestingUserEmail = data.email;
 
         // Extract requested user's email from the request parameters
         const requestedUserEmail = req.params.email;
@@ -48,7 +52,6 @@ const getUserByEmail = async (req, res) => {
         } else {
             status = 204;
         }
-
         return res.status(status).json({ user: requestedUser, status });
     } catch (error) {
         console.error("Error retrieving user:", error);
