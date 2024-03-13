@@ -66,7 +66,7 @@ const updateUser = async (req, res) => {
         // Verify the token and extract the data
         const data = jwt.verify(token, "keyyy");
         // Now data contains the decoded token payload, including the email
-        const requested_user = data.requested_user;
+        const requested_user = data.userEmail;
         // Call updateUser service method with extracted email and other parameters
         const user = await userService.updateUser(req.params.id, req.body.userBody, requested_user);
 
@@ -89,7 +89,7 @@ const deleteUser = async (req, res) => {
         // Verify the token and extract the data
         const data = jwt.verify(token, "keyyy");
         // Now data contains the decoded token payload, including the email
-        const requested_user = data.requested_user;
+        const requested_user = data.userEmail;
         // Call deleteUser service method with extracted email and other parameters
         const user = await userService.deleteUser(req.params.id, requested_user);
         
