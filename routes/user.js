@@ -20,7 +20,7 @@ router.route('/:id/friends/:fid')
    .delete(userController.deleteFriend);
 
 router.route('/:id')
-    .get(userController.getUserById)
+    .get(userController.getUserByEmail)
     .patch(userController.updateUser)
     .delete(userController.deleteUser);
 
