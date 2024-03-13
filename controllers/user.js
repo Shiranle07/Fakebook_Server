@@ -111,11 +111,11 @@ const sendFriendRequest = async (req, res) => {
     // Verify the token and extract the data
     const data = jwt.verify(token, "keyyy");
     // Now data contains the decoded token payload, including the email
-    const requested_user = data.requested_user;
+    const requested_user = data.userEmail;
     console.log("user requested:", requested_user)
 
     const senderEmail = req.body.senderEmail;
-    const receiverEmail = req.body.receiverEmail;
+    const receiverEmail = req.params.id;
 
     const response = await userService.sendFriendRequest(senderEmail, receiverEmail);
 
