@@ -33,10 +33,11 @@ const editPost = async (req, res) => {
         const data = jwt.verify(token, "keyyy");
         // Now data contains the decoded token payload, including the email
         const userEmail = data.userEmail;
+        console.log("user requested:", userEmail)
         // Call editPost service method with extracted email and other parameters
         const post = await postService.editPost(req.params.id, req.body.postBody, userEmail);
 
-        if(userEmail != req.body.user_email) return res.status(404).json({ errors: ['It is not your Post!'] });
+        // if(userEmail != req.body.user_email) return res.status(404).json({ errors: ['It is not your Post!'] });
 
         if (!post) {
             return res.status(404).json({ errors: ['Post not found'] });
@@ -59,17 +60,14 @@ const deletePost = async (req, res) => {
         const userEmail = data.userEmail;
         // Call deletePost service method with extracted email and other parameters
         const post = await postService.deletePost(req.params.id, userEmail);
-        
-        if(userEmail != req.body.user_email) return res.status(404).json({ errors: ['It is not your Post!'] });
-
         if (!post) {
-            return res.status(404).json({ errors: ['Post not found'] });
+            return res.status(404).json({ errors: ["You can't delete someone else's post!"] });
         }
         res.json(post);
-    } catch (error) {
-        console.error("Error deleting post:", error);
-        res.status(500).json({ errors: ['Server error'] });
-    }
+        } catch (error) {
+            console.error("Error deleting post:", error);
+            res.status(500).json({ errors: ['Server error'] });
+        }
 };
 
 

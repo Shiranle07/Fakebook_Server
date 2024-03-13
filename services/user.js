@@ -16,10 +16,6 @@ const addUser = async(firstName, lastName, email, password, photo) => {
 
 }
 
-const getUserById = async(id) => {
-    return await User.findById(id);
-}
-
 const updateUser = async(id, userBody) => {
     const user = await getUserById(id);
     if (!user){
@@ -53,6 +49,14 @@ const authenticateUser = async (email, password) => {
 
     return null;
 };
+
+const getUserById = async (email) => {
+    const user = await User.findOne({ email });
+    if(user){
+        return user;
+    }
+    return null;
+}
 
 const sendFriendRequest = async (senderEmail, receiverEmail) => {
     const sender = await User.findOne({ email: senderEmail });
@@ -157,3 +161,4 @@ const deleteFriend = async (receiverEmail, senderEmail) => {
 };
 
 module.exports = { addUser, authenticateUser, sendFriendRequest, acceptFriendRequest, deleteFriend, rejectFriendRequest, getUserById, updateUser, deleteUser };
+
