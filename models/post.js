@@ -1,3 +1,4 @@
+// models/post file
 const mongoose = require("mongoose");
 const { formatDistanceToNow } = require('date-fns');
 
