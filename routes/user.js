@@ -13,7 +13,6 @@ router.route('/:id/posts')
     .get(postController.getUserPosts)
     .post(postController.addPost);
 
-
 router.route('/:id/friends')
     .get(userController.getFriendList)
     .post(userController.sendFriendRequest);

@@ -1,5 +1,7 @@
 const Post = require('../models/post');
 const User = require('../models/user');
+const userService = require("../services/user");
+
 
 const addPost = async(email, body, photo) => {
     const user = await User.findOne({ email });
@@ -7,13 +9,6 @@ const addPost = async(email, body, photo) => {
     if (photo) post.postPhoto = photo;
     return await post.save();
 }
-
-        // // Get the user's posts
-        // const userPosts = await Post.find({ user: userEmail })
-        //                             .sort({ publication_date: -1 });
-
-        // return userPosts.sort({ publication_date: -1 });
-    
 
 const getUserPosts = async (askingUser, askedUser) => {
     try {
@@ -46,11 +41,10 @@ const getUserPosts = async (askingUser, askedUser) => {
     }
 };
 
-// 20 last posts of the users friends and 5 more posts from non-friends of the user
 const getPosts = async (userEmail) => {
     try {
         // Get the user's friends
-        const user = await User.findById(userEmail).populate('friends');
+        const user = await userService.getUserByEmail(userEmail).populate('friends');
         const friendsIds = user.friends.map(friend => friend._id);
 
         // Get the 20 latest posts from the user's friends
