@@ -7,12 +7,34 @@ const addPost= async(req, res) => {
     res.json(await postService.addPost(data.userEmail, req.body.postBody, req.body.postPhoto));
 };
 
+const getUserPosts = async (req, res) => {
+    try {
+        // Extract token from authorization header
+        const token = req.headers.authorization.split(" ")[1];
+        // Verify the token and extract the data
+        const data = jwt.verify(token, "keyyy");
+        // Get the user's ID from the request parameters
+        const userId = req.params.id;
+        // Call the service to retrieve the userPosts
+        const userPosts = await userService.getUserPosts(data.userEmail, userId);
+
+        if (!userPosts) {
+            return res.status(404).json({ error: 'Limited access to user Posts' });
+        }
+
+        // Return the userPosts
+        res.json({ userPosts });
+    } catch (error) {
+        console.error('Error fetching user Posts:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
 const getPosts= async(req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const data = jwt.verify(token, "keyyy");
     res.json(await postService.getPosts(data.userEmail));
 };
-
 
 const getPostById = async (req, res) => {
     try {
@@ -51,7 +73,6 @@ const editPost = async (req, res) => {
     }
 };
 
-
 const deletePost = async (req, res) => {
     try {
         // Extract token from authorization header
@@ -72,6 +93,4 @@ const deletePost = async (req, res) => {
         }
 };
 
-
-
-module.exports = {addPost, getPosts, getPostById, editPost, deletePost};
+module.exports = {addPost, getPosts, getPostById, editPost, deletePost, getUserPosts};
