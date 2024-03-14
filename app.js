@@ -3,6 +3,7 @@ var app = express();
 app.use(express.static('public'));
 
 const bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: "1000mb"}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 

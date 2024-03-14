@@ -3,7 +3,7 @@ const User = require('../models/user');
 
 const addPost = async(email, body, photo) => {
     const user = await User.findOne({ email });
-    const post = new Post({user_email: email, user_firstName: user.firstName, user_lastName: user.lastName, postBody: body});
+    const post = new Post({user_email: email, user_firstName: user.firstName, user_lastName: user.lastName, user_photo: user.profilePhoto, postBody: body});
     if (photo) post.postPhoto = photo;
     return await post.save();
 }
