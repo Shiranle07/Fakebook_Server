@@ -9,11 +9,9 @@ router.route('/')
     .post(userController.addUser);
 
 router.route('/:id/friends')
-// .get -> returns the friends list of the id's user, only for his friends (by the JWT who send the request)
+//returns the friends list of the id's user, only for his friends (by the JWT who send the request)
+    .get(userController.getFriendList)
     .post(userController.sendFriendRequest);
-
-// router.route('/friend-rejectRequest')
-//     .post(userController.rejectFriendRequest);
 
 router.route('/:id/friends/:fid')
    .patch(userController.acceptFriendRequest)
