@@ -184,7 +184,7 @@ const deleteFriend = async(req, res) => {
         const response = await userService.deleteFriend(deleterEmail, deletedEmail);
 
         if (response) {
-            res.json({ message: "Friendship deleted successfully" });
+            res.json({ message: "Deleted successfully" });
         } else {
             res.status(400).json({ error: "Failed to delete friendship" });
         }
