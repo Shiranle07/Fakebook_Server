@@ -1,5 +1,7 @@
 const Post = require('../models/post');
 const User = require('../models/user');
+const userService = require("../services/user");
+
 
 const addPost = async(email, body, photo) => {
     const user = await User.findOne({ email });
@@ -8,11 +10,41 @@ const addPost = async(email, body, photo) => {
     return await post.save();
 }
 
-// 20 last posts of the users friends and 5 more posts from non-friends of the user
+const getUserPosts = async (askingUser, askedUser) => {
+    try {
+        // Check if the asking user is in the asked user's friends list
+        const askedUserDetails = await User.findById(askedUser);
+
+        if (!askedUserDetails) {
+            return null; // Asked user not found
+        }
+
+        // Check if the asking user is in the asked user's friends list
+        const isFriend = askedUserDetails.friends.includes(askingUser);
+
+        if (!isFriend || (askingUser != askedUser)) {
+            return null; // The asking user is not a friend of the asked user
+        }
+
+        // Get the user's posts
+        const userPosts = await Post.find({ user: userEmail })
+                                    .sort({ publication_date: -1 });
+
+        if (!friendList || !friendList.friends) {
+            return null; // No friends found for the asked user
+        }
+
+        return userPosts.sort({ publication_date: -1 });
+    } catch (error) {
+        console.error('Error fetching user posts:', error);
+        throw error;
+    }
+};
+
 const getPosts = async (userEmail) => {
     try {
         // Get the user's friends
-        const user = await User.findById(userEmail).populate('friends');
+        const user = await userService.getUserByEmail(userEmail).populate('friends');
         const friendsIds = user.friends.map(friend => friend._id);
 
         // Get the 20 latest posts from the user's friends
@@ -71,4 +103,4 @@ const deletePost = async(id, email) => {
 
 };
 
-module.exports = {addPost, getPosts, getPostById, deletePost, editPost};
+module.exports = {addPost, getPosts, getPostById, deletePost, editPost, getUserPosts};
