@@ -58,6 +58,36 @@ const getUserByEmail = async (email) => {
     return null;
 }
 
+const getFriendList = async (askingUser, askedUser) => {
+    try {
+        // Check if the asking user is in the asked user's friends list
+        const askedUserDetails = await User.findById(askedUser);
+
+        if (!askedUserDetails) {
+            return null; // Asked user not found
+        }
+
+        // Check if the asking user is in the asked user's friends list
+        const isFriend = askedUserDetails.friends.includes(askingUser);
+
+        if (!isFriend || (askingUser != askedUser)) {
+            return null; // The asking user is not a friend of the asked user
+        }
+
+        // Retrieve the friend list for the asked user
+        const friendList = await User.findById(askedUser, 'friends').populate('friends', 'firstName lastName');
+
+        if (!friendList || !friendList.friends) {
+            return null; // No friends found for the asked user
+        }
+
+        return friendList.friends;
+    } catch (error) {
+        console.error('Error fetching friend list:', error);
+        throw error;
+    }
+};
+
 const sendFriendRequest = async (senderEmail, receiverEmail) => {
     const sender = await User.findOne({ email: senderEmail });
     const receiver = await User.findOne({ email: receiverEmail });
@@ -170,5 +200,5 @@ const deleteFriend = async (deleterEmail, deletedEmail) => {
 
 };
 
-module.exports = { addUser, authenticateUser, sendFriendRequest, acceptFriendRequest, deleteFriend, rejectFriendRequest, getUserByEmail, updateUser, deleteUser };
+module.exports = { addUser, authenticateUser, sendFriendRequest, acceptFriendRequest, deleteFriend, rejectFriendRequest, getUserByEmail, updateUser, deleteUser, getFriendList };
 
