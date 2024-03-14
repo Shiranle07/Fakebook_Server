@@ -91,21 +91,29 @@ const rejectFriendRequest = async (receiverEmail, senderEmail) => {
         return null; // Sender or receiver not found
     }
 
-    if (!receiver.friend_reqs_received.includes(sender.email)) {
-        return null; // No friend request found from sender
+    // Check if the sender's email is in the receiver's friend requests received list
+    if (receiver.friend_reqs_received.includes(sender.email)) {
+        // Remove sender from receiver's friend requests received list
+        receiver.friend_reqs_received = receiver.friend_reqs_received.filter(requesterId => requesterId.toString() !== sender.email.toString());
+        // Remove receiver from sender's friend requests sent list
+        sender.friend_reqs_sent = sender.friend_reqs_sent.filter(receiverId => receiverId.toString() !== receiver.email.toString());
+    } else if (sender.friend_reqs_sent.includes(receiver.email)) {
+        // Check if the receiver's email is in the sender's friend requests sent list
+        // Remove receiver from sender's friend requests sent list
+        sender.friend_reqs_sent = sender.friend_reqs_sent.filter(receiverId => receiverId.toString() !== receiver.email.toString());
+        // Remove sender from receiver's friend requests received list
+        receiver.friend_reqs_received = receiver.friend_reqs_received.filter(requesterId => requesterId.toString() !== sender.email.toString());
+    } else {
+        // If neither sender nor receiver are in each other's friend requests lists, return null
+        return null;
     }
-
-    // Remove sender from receiver's friend requests received list
-    receiver.friend_reqs_received = receiver.friend_reqs_received.filter(requesterId => requesterId.toString() !== sender.email.toString());
-
-    // Remove receiver from sender's friend requests sent list
-    sender.friend_reqs_sent = sender.friend_reqs_sent.filter(receiverId => receiverId.toString() !== receiver.email.toString());
 
     await sender.save();
     await receiver.save();
 
     return { sender, receiver }; // Return sender and receiver information
 };
+
 
 const acceptFriendRequest = async (receiverEmail, senderEmail) => {
     const receiver = await User.findOne({ email: receiverEmail });
@@ -135,7 +143,7 @@ const acceptFriendRequest = async (receiverEmail, senderEmail) => {
 };
 
 
-const deleteFriend = async (receiverEmail, senderEmail) => {
+const deleteFriend = async (deleterEmail, deletedEmail) => {
     const deleter = await User.findOne({ email: deleterEmail });
     const deleted = await User.findOne({ email: deletedEmail });
 
@@ -144,7 +152,9 @@ const deleteFriend = async (receiverEmail, senderEmail) => {
     }
 
     if (!deleter.friends.includes(deleted.email) || !deleted.friends.includes(deleter.email)) {
-        return null; // Deleter and deleted are not friends
+        friendReq = rejectFriendRequest(deleter, deleted);
+        if (!friendReq) return null; // deleter and deleted are not friends
+        return friendReq;
     }
 
     // Remove deleted from deleter's friends list
