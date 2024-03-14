@@ -4,7 +4,7 @@ const { formatDistanceToNow } = require('date-fns');
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
-      user_email: {
+    user_email: {
         type: String,
         required: true
     },
@@ -16,10 +16,10 @@ const PostSchema = new Schema({
         type: String,
         required: true
     },
-    // user_photo: {
-    //     type: String,
-    //     required: true
-    // },
+    user_photo: {
+        type: String,
+        required: true
+    },
     postBody: {
         type: String,
         required: true

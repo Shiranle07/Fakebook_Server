@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const userService = require("../services/user");
 
 const addUser= async(req, res) => {
+    console.log("photo in server", req.body.profilePhoto)
     const response = await userService.addUser(req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.body.profilePhoto);
 
     if(response){

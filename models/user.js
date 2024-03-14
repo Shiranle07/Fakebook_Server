@@ -22,8 +22,7 @@ const User = new Schema({
     },
     profilePhoto: {
         type: String,
-        //type: BigInt64Array,
-        default: "defaultProfilePhoto.jpg"
+        required: true
     },
     friends: [{
         type: String,
