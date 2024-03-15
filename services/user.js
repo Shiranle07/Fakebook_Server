@@ -27,34 +27,6 @@ const updateUser = async(id, userBody) => {
     return user;
 }
 
-/*
-        // Delete user's friendship requests sent
-        await User.updateMany(
-            { friend_reqs_sent: { $in: [id] } },
-            { $pull: { friend_reqs_sent: id } }
-        );
-
-        // Delete user's friendship requests received
-        await User.updateMany(
-            { friend_reqs_received: { $in: [id] } },
-            { $pull: { friend_reqs_received: id } }
-        );
-
-        // Delete user's posts
-        await Post.deleteMany({ user_email: requested_user });
-
-        // Delete the user
-        const deletedUser = await User.findByIdAndDelete(id);
-
-        return deletedUser;
-    } catch (error) {
-        console.error("Error deleting user:", error);
-        throw error;
-    }
-};
-
-*/
-
 const deleteUser = async (userEmail) => {
     try {
         // Get the user by email
