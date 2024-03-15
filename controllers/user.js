@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const userService = require("../services/user");
 
 const addUser= async(req, res) => {
+    console.log("photo in server", req.body.profilePhoto)
     const response = await userService.addUser(req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.body.profilePhoto);
 
     if(response){
@@ -91,9 +92,9 @@ const deleteUser = async (req, res) => {
         // Now data contains the decoded token payload, including the email
         const requested_user = data.userEmail;
 
+        if(requested_user != req.params.id) return res.status(404).json({ errors: ['It is not your user!'] });
+
         const user = await userService.deleteUser(req.params.id, requested_user);
-        
-        if(requested_user != req.body.user_email) return res.status(404).json({ errors: ['It is not your user!'] });
 
         if (!user) {
             return res.status(404).json({ errors: ['User not found'] });
@@ -104,7 +105,6 @@ const deleteUser = async (req, res) => {
         res.status(500).json({ errors: ['Server error'] });
     }
 };
-
 
 const getFriendList = async (req, res) => {
     try {

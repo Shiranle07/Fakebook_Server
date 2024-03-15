@@ -5,7 +5,7 @@ const userService = require("../services/user");
 
 const addPost = async(email, body, photo) => {
     const user = await User.findOne({ email });
-    const post = new Post({user_email: email, user_firstName: user.firstName, user_lastName: user.lastName, postBody: body});
+    const post = new Post({user_email: email, user_firstName: user.firstName, user_lastName: user.lastName, user_photo: user.profilePhoto, postBody: body});
     if (photo) post.postPhoto = photo;
     return await post.save();
 }
@@ -13,7 +13,10 @@ const addPost = async(email, body, photo) => {
 const getUserPosts = async (askingUser, askedUser) => {
     try {
         // Check if the asking user is in the asked user's friends list
-        const askedUserDetails = await User.findById(askedUser);
+        console.log("got: ", askedUser)
+        console.log("asker: ", askingUser)
+        const askedUserDetails = await User.findOne({email: askedUser});
+        console.log("searching fot posts of: ", askedUserDetails)
 
         if (!askedUserDetails) {
             return null; // Asked user not found
@@ -21,20 +24,22 @@ const getUserPosts = async (askingUser, askedUser) => {
 
         // Check if the asking user is in the asked user's friends list
         const isFriend = askedUserDetails.friends.includes(askingUser);
+        console.log("friendship:", isFriend)
 
-        if (!isFriend || (askingUser != askedUser)) {
+        if (!isFriend && (askingUser != askedUser)) {
+            console.log("not the same and not friends")
             return null; // The asking user is not a friend of the asked user
         }
 
         // Get the user's posts
-        const userPosts = await Post.find({ user: userEmail })
+        const userPosts = await Post.find({ user_email: askedUser })
                                     .sort({ publication_date: -1 });
 
-        if (!friendList || !friendList.friends) {
+        if (!userService.getFriendList(askingUser, askedUser)) {
             return null; // No friends found for the asked user
         }
 
-        return userPosts.sort({ publication_date: -1 });
+        return userPosts;
     } catch (error) {
         console.error('Error fetching user posts:', error);
         throw error;
@@ -44,7 +49,7 @@ const getUserPosts = async (askingUser, askedUser) => {
 const getPosts = async (userEmail) => {
     try {
         // Get the user's friends
-        const user = await userService.getUserByEmail(userEmail).populate('friends');
+        const user = await userService.getUserByEmail(userEmail);
         const friendsIds = user.friends.map(friend => friend._id);
 
         // Get the 20 latest posts from the user's friends
@@ -64,11 +69,14 @@ const getPosts = async (userEmail) => {
         // Combine all posts
         const posts = [...friendPosts, ...userPosts, ...nonFriendPosts];
 
-        return posts.sort({ publication_date: -1 });
+        // Sort all posts by publication date in descending order
+        posts.sort((a, b) => b.publication_date - a.publication_date);
+
+        return posts;
     } catch (error) {
         console.error("Error fetching posts:", error);
-        throw error;
-    }
+        throw error;
+    }
 };
 
 const getPostById = async(id) => {
