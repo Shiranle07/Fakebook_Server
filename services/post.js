@@ -35,9 +35,9 @@ const getUserPosts = async (askingUser, askedUser) => {
         const userPosts = await Post.find({ user_email: askedUser })
                                     .sort({ publication_date: -1 });
 
-        // if (!friendList || !friendList.friends) {
-        //     return null; // No friends found for the asked user
-        // }
+        if (!userService.getFriendList(askingUser, askedUser)) {
+            return null; // No friends found for the asked user
+        }
 
         return userPosts;
     } catch (error) {
