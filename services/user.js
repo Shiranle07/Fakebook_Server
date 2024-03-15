@@ -1,6 +1,7 @@
 // services/user file
 
 const User = require('../models/user');
+const Post = require('../models/post');
 const bcrypt = require('bcrypt');
 const postService = require("../services/post");
 
@@ -26,16 +27,62 @@ const updateUser = async(id, userBody) => {
     return user;
 }
 
-const deleteUser = async(userEmail) => {
-    const user = await getUserByEmail(userEmail);
-    if (!user){
-        return null; // user not found
-    }
-    
-    await user.deleteOne();
+const deleteUser = async (userEmail) => {
+    try {
+        // Get the user by email
+        const user = await getUserByEmail(userEmail);
+        
+        if (!user) {
+            return null; // User not found
+        }
 
-    return "User deleted";
+        // Get the user's friends
+        const friends = await User.find({ _id: { $in: user.friends } });
+
+        // Remove the user from the friends list of each friend
+        await Promise.all(friends.map(async (friend) => {
+            await deleteFriend(friend.email, userEmail);
+        }));
+
+        // Remove the user from the friend_reqs_sent list of each user they sent requests to
+        await Promise.all(user.friend_reqs_sent.map(async (requestedEmail) => {
+            await deleteFriend(userEmail, requestedEmail);
+        }));
+
+        // Delete all posts created by the user
+        await Post.deleteMany({ user_email: userEmail });
+
+        // Delete the user
+        await user.deleteOne();
+
+        return "User deleted";
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        throw error;
+    }
 };
+
+
+
+
+// const deleteUser = async(userEmail) => {
+//     const user = await getUserByEmail(userEmail);
+    // if (!user){
+    //     return null; // user not found
+    // }
+
+    // // Get the user's friends
+    // const friendsIds = user.friends.map(friend => friend._id);
+
+    // Get the 20 latest posts from the user's friends
+//     const friendPosts = await Post.find({ user: { $in: friendsIds } })
+//                                     .sort({ publication_date: -1 })
+//                                     .limit(20);
+    
+    
+//     await user.deleteOne();
+//     return "User deleted";
+// };
 
 const authenticateUser = async (email, password) => {
     // Find the user by email
