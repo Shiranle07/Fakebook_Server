@@ -11,10 +11,6 @@ app.use(express.json());
 // Parse incoming requests with URL-encoded payloads
 app.use(express.urlencoded({ extended: true }));
 
-// Use a library to perform the cryptographic operations
-const jwt = require("jsonwebtoken");
-const key = "Fakebook.Fakebook.Fakebook super key";    
-
 
 const cors = require('cors'); 
 app.use(cors());

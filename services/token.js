@@ -8,9 +8,9 @@ const generateToken = async (userEmail) => {
     return token;
 }
 
-const verifyToken = async (token) => {
-    const existingToken = await Token.findOne({ token });
-    return existingToken ? jwt.verify(token, key) : null;
-};
+// const verifyToken = async (token) => {
+//     const existingToken = await Token.findOne({ token });
+//     return existingToken ? jwt.verify(token, key) : null;
+// };
 
-module.exports = { generateToken, verifyToken };
+module.exports = { generateToken };

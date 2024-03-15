@@ -1,4 +1,5 @@
 const postService = require("../services/post");
+const userService = require("../services/user");
 const jwt = require("jsonwebtoken");
 
 const addPost= async(req, res) => {
@@ -16,7 +17,7 @@ const getUserPosts = async (req, res) => {
         // Get the user's ID from the request parameters
         const userId = req.params.id;
         // Call the service to retrieve the userPosts
-        const userPosts = await userService.getUserPosts(data.userEmail, userId);
+        const userPosts = await postService.getUserPosts(data.userEmail, userId);
 
         if (!userPosts) {
             return res.status(404).json({ error: 'Limited access to user Posts' });
