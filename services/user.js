@@ -62,9 +62,6 @@ const deleteUser = async (userEmail) => {
     }
 };
 
-
-
-
 // const deleteUser = async(userEmail) => {
 //     const user = await getUserByEmail(userEmail);
     // if (!user){
@@ -110,7 +107,7 @@ const getUserByEmail = async (email) => {
 const getFriendList = async (askingUser, askedUser) => {
     try {
         // Check if the asking user is in the asked user's friends list
-        const askedUserDetails = await User.findById(askedUser);
+        const askedUserDetails = await getUserByEmail(askedUser);
 
         if (!askedUserDetails) {
             return null; // Asked user not found
@@ -119,12 +116,14 @@ const getFriendList = async (askingUser, askedUser) => {
         // Check if the asking user is in the asked user's friends list
         const isFriend = askedUserDetails.friends.includes(askingUser);
 
-        if (!isFriend || (askingUser != askedUser)) {
-            return null; // The asking user is not a friend of the asked user
+        // The asking user is not a friend of the asked user or the user himself
+        if (!isFriend && (askingUser != askedUser)) {
+            return null; 
         }
 
         // Retrieve the friend list for the asked user
-        const friendList = await User.findById(askedUser, 'friends').populate('friends', 'firstName lastName');
+        const friendList = await User.findOne({ email: askedUserEmail }, 'friends')
+                                        .populate('friends', 'firstName lastName');
 
         if (!friendList || !friendList.friends) {
             return null; // No friends found for the asked user
