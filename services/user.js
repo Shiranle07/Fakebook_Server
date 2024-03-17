@@ -122,7 +122,7 @@ const getFriendList = async (askingUser, askedUser) => {
         }
 
         // Retrieve the friend list for the asked user
-        const friendList = await User.findOne({ email: askedUserEmail }, 'friends')
+        const friendList = await User.findOne({ email: askedUser }, 'friends')
                                         .populate('friends', 'firstName lastName');
 
         if (!friendList || !friendList.friends) {
@@ -132,6 +132,26 @@ const getFriendList = async (askingUser, askedUser) => {
         return friendList.friends;
     } catch (error) {
         console.error('Error fetching friend list:', error);
+        throw error;
+    }
+};
+
+const getFriendReq = async (askingUser, askedUser) => {
+    try {
+        const askedUserDetails = await getUserByEmail(askedUser);
+
+        if (!askedUserDetails) {
+            return null; // Asked user not found
+        }
+
+        // Check if the provided askingUser matches the askedUser
+        if (askedUser != askingUser) {
+            return null; // Only allow the user to access their own friend requests
+        }
+
+        return askedUserDetails.friend_reqs_received;
+    } catch (error) {
+        console.error('Error fetching friend requests list:', error);
         throw error;
     }
 };

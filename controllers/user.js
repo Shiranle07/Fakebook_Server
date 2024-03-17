@@ -71,7 +71,9 @@ const updateUser = async (req, res) => {
         // Call updateUser service method with extracted email and other parameters
         const user = await userService.updateUser(req.params.id, req.body.userBody, requested_user);
 
-        if(requested_user != req.body.user_email) return res.status(404).json({ errors: ['It is not your user!'] });
+        if(requested_user != req.params.id){
+            return res.status(404).json({ errors: ['It is not your user!'] });
+        }
 
         if (!user) {
             return res.status(404).json({ errors: ['User not found'] });
@@ -129,6 +131,33 @@ const getFriendList = async (req, res) => {
         res.json({ friendList });
     } catch (error) {
         console.error('Error fetching friend list:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+const getFriendReq = async (req, res) => {
+    try {
+        // Extract token from authorization header
+        const token = req.headers.authorization.split(" ")[1];
+        // Verify the token and extract the data
+        const data = jwt.verify(token, "keyyy");
+        // Now data contains the decoded token payload, including the email
+        const askingUserEmail = data.userEmail;
+
+        // Get the user's ID from the request parameters
+        const userId = req.params.id;
+
+        // Call the service to retrieve the friend requests list
+        const friendReq = await userService.getFriendReq(askingUserEmail, userId);
+
+        if (!friendReq) {
+            return res.status(404).json({ error: 'Limited access to friend requests list' });
+        }
+
+        // Return the friend requests list
+        res.json({ friendReq });
+    } catch (error) {
+        console.error('Error fetching friend requests list:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -222,4 +251,4 @@ const deleteFriend = async(req, res) => {
     }
 };
 
-module.exports = { addUser, sendFriendRequest, acceptFriendRequest, deleteFriend, rejectFriendRequest, getUserByEmail, updateUser, deleteUser, getFriendList };
+module.exports = { addUser, sendFriendRequest, acceptFriendRequest, deleteFriend, rejectFriendRequest, getUserByEmail, updateUser, deleteUser, getFriendList, getFriendReq };
