@@ -62,19 +62,6 @@ const getUserByEmail = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-
-        // // Extract token from authorization header
-        // const token = req.headers.authorization.split(" ")[1];
-        // // Verify the token and extract the data
-        // const data = jwt.verify(token, "keyyy");
-        // // Now data contains the decoded token payload, including the email
-        // const userEmail = data.userEmail;
-        console.log("user requested:", userEmail)
-        // Call editPost service method with extracted email and other parameters
-        const post = await postService.editPost(req.params.id, req.body.postBody, userEmail);
-
-
-
         // Extract token from authorization header
         const token = req.headers.authorization.split(" ")[1];
         // Verify the token and extract the data
