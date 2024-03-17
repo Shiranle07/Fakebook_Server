@@ -17,13 +17,13 @@ const addUser = async(firstName, lastName, email, password, photo) => {
 
 }
 
-const updateUser = async (id, userBody) => {
+const updateUser = async (id, userBody, email) => {
     try {
-        // Update user details
         const user = await getUserByEmail(id);
         if (!user) {
             return null; // User not found
         }
+        if(email != id) return null
         
         // Update specific fields if they are provided in userBody
         if (userBody.firstName) {
