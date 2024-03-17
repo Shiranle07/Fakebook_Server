@@ -114,9 +114,11 @@ const getFriendList = async (req, res) => {
         const data = jwt.verify(token, "keyyy");
         // Now data contains the decoded token payload, including the email
         const askingUserEmail = data.userEmail;
+        console.log("asking:", askingUserEmail)
 
         // Get the user's ID from the request parameters
         const userId = req.params.id;
+        console.log("asked:", userId)
 
         // Call the service to retrieve the friend list
         const friendList = await userService.getFriendList(askingUserEmail, userId);

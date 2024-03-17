@@ -122,7 +122,7 @@ const getFriendList = async (askingUser, askedUser) => {
         }
 
         // Retrieve the friend list for the asked user
-        const friendList = await User.findOne({ email: askedUserEmail }, 'friends')
+        const friendList = await User.findOne({ email: askedUser }, 'friends')
                                         .populate('friends', 'firstName lastName');
 
         if (!friendList || !friendList.friends) {
