@@ -17,15 +17,44 @@ const addUser = async(firstName, lastName, email, password, photo) => {
 
 }
 
-const updateUser = async(id, userBody) => {
-    const user = await getUserByEmail(id);
-    if (!user){
-        return null;
+const updateUser = async (id, userBody) => {
+    try {
+        // Update user details
+        const user = await getUserByEmail(id);
+        if (!user) {
+            return null; // User not found
+        }
+        
+        // Update specific fields if they are provided in userBody
+        if (userBody.firstName) {
+            user.firstName = userBody.firstName;
+        }
+        if (userBody.lastName) {
+            user.lastName = userBody.lastName;
+        }
+        if (userBody.password) {
+            user.password = userBody.password;
+        }
+        if (userBody.profilePhoto) {
+            user.profilePhoto = userBody.profilePhoto;
+        }
+        
+        // Save updated user
+        await user.save();
+
+        // Update user details in all their posts if necessary
+        if (userBody.firstName || userBody.lastName || userBody.profilePhoto) {
+            await Post.updateMany({ user_email: id }, { user_firstName: user.firstName, user_lastName: user.lastName });
+        }
+
+        return user;
+    } catch (error) {
+        console.error("Error updating user:", error);
+        throw error;
     }
-    user.userBody = userBody;
-    await user.save();
-    return user;
-}
+};
+
+
 
 const deleteUser = async (userEmail) => {
     try {

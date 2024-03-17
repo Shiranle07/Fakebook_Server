@@ -59,7 +59,8 @@ const getPosts = async (userEmail) => {
 
         // Get the user's posts
         const userPosts = await Post.find({ user: userEmail })
-                                    .sort({ publication_date: -1 });
+                                    .sort({ publication_date: -1 })
+                                    .limit(10);
 
         // Exclude the user's posts and posts from friends
         const nonFriendPosts = await Post.find({ user: { $nin: [...friendsIds, userEmail] } })
