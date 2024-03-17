@@ -62,7 +62,7 @@ const editPost = async (req, res) => {
         // Call editPost service method with extracted email and other parameters
         const post = await postService.editPost(req.params.id, req.body.postBody, userEmail);
 
-        if(userEmail != req.params.id) return res.status(404).json({ errors: ['It is not your Post!'] });
+        // if(userEmail != req.params.id) return res.status(404).json({ errors: ['It is not your Post!'] });
 
         if (!post) {
             return res.status(404).json({ errors: ['Post not found'] });
