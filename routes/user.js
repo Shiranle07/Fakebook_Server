@@ -19,7 +19,8 @@ router.route('/:id/friends')
 
 router.route('/:id/friends/:fid')
    .patch(userController.acceptFriendRequest)
-   .delete(userController.deleteFriend);
+   .delete(userController.deleteFriend)
+   .get(userController.getFriendReq);
 
 router.route('/:id')
     .get(userController.getUserByEmail)
