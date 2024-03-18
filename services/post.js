@@ -53,17 +53,17 @@ const getPosts = async (userEmail) => {
         const friendsIds = user.friends.map(friend => friend._id);
 
         // Get the 20 latest posts from the user's friends
-        const friendPosts = await Post.find({ user: { $in: friendsIds } })
+        const friendPosts = await Post.find({ user_email: { $in: friendsIds } })
             .sort({ publication_date: -1 })
             .limit(20);
 
         // Get the user's posts
-        const userPosts = await Post.find({ user: userEmail })
+        const userPosts = await Post.find({ user_email: userEmail })
             .sort({ publication_date: -1 })
             .limit(10);
 
         // Exclude the user's posts and posts from friends
-        const nonFriendPosts = await Post.find({ user: { $nin: [...friendsIds, userEmail] } })
+        const nonFriendPosts = await Post.find({ user_email: { $nin: [...friendsIds, userEmail] } })
             .sort({ publication_date: -1 })
             .limit(5);
 
