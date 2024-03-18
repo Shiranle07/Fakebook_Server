@@ -68,7 +68,7 @@ const updateUser = async (req, res) => {
         const data = jwt.verify(token, "keyyy");
         // Now data contains the decoded token payload, including the email
         const requested_user = data.userEmail;
-        console.log("user requested:", userEmail)
+        console.log("user requested:", requested_user)
 
         // Call updateUser service method with extracted email and other parameters
         const user = await userService.updateUser(req.params.id, req.body.userBody, requested_user);

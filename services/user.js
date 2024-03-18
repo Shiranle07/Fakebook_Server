@@ -54,8 +54,6 @@ const updateUser = async (id, userBody, email) => {
     }
 };
 
-
-
 const deleteUser = async (userEmail) => {
     try {
         // Get the user by email
@@ -133,26 +131,26 @@ const getUserByEmail = async (email) => {
     return null;
 }
 
-const getFriendList = async (askingUser, askedUser) => {
+const getFriendList = async (askingUserEmail, askedUserEmail) => {
     try {
         // Check if the asking user is in the asked user's friends list
-        const askedUserDetails = await getUserByEmail(askedUser);
+        const askedUserDetails = await getUserByEmail(askedUserEmail);
 
         if (!askedUserDetails) {
             return null; // Asked user not found
         }
 
         // Check if the asking user is in the asked user's friends list
-        const isFriend = askedUserDetails.friends.includes(askingUser);
+        const isFriend = askedUserDetails.friends.includes(askingUserEmail);
 
         // The asking user is not a friend of the asked user or the user himself
-        if (!isFriend && (askingUser != askedUser)) {
+        if (!isFriend && (askingUserEmail !== askedUserEmail)) {
             return null; 
         }
 
         // Retrieve the friend list for the asked user
-        const friendList = await User.findOne({ email: askedUser }, 'friends')
-                                        .populate('friends', 'firstName lastName');
+        const friendList = await User.findOne({ email: askedUserEmail }, 'friends')
+                                        .populate('friends', 'firstName lastName profilePhoto');
 
         if (!friendList || !friendList.friends) {
             return null; // No friends found for the asked user
@@ -164,6 +162,7 @@ const getFriendList = async (askingUser, askedUser) => {
         throw error;
     }
 };
+
 
 const getFriendReq = async (askingUser, askedUser) => {
     try {
@@ -297,5 +296,5 @@ const deleteFriend = async (deleterEmail, deletedEmail) => {
 
 };
 
-module.exports = { addUser, authenticateUser, sendFriendRequest, acceptFriendRequest, deleteFriend, rejectFriendRequest, getUserByEmail, updateUser, deleteUser, getFriendList };
+module.exports = { addUser, authenticateUser, sendFriendRequest, acceptFriendRequest, deleteFriend, rejectFriendRequest, getUserByEmail, updateUser, deleteUser, getFriendList, getFriendReq };
 
