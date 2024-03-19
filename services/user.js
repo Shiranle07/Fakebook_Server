@@ -150,13 +150,14 @@ const getFriendList = async (askingUserEmail, askedUserEmail) => {
 
         // Retrieve the friend list for the asked user
         const friendList = await User.findOne({ email: askedUserEmail }, 'friends')
-                                        .populate('friends', 'firstName lastName profilePhoto');
-
+        const friendsReq = await User.findOne({ email: askedUserEmail }, 'friend_reqs_received')
+        console.log(friendsReq)
+        const friendsData = await User.find({ email: { $in: friendList.friends } }).select('firstName lastName profilePhoto');
+        const reqData = await User.find({ email: { $in: friendsReq.friend_reqs_received } }).select('email firstName lastName profilePhoto');
         if (!friendList || !friendList.friends) {
             return null; // No friends found for the asked user
         }
-
-        return friendList.friends;
+        return {friendsData, reqData};
     } catch (error) {
         console.error('Error fetching friend list:', error);
         throw error;

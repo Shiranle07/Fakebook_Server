@@ -130,7 +130,7 @@ const getFriendList = async (req, res) => {
         }
 
         // Return the friend list
-        res.json({ friendList });
+        res.json( friendList );
     } catch (error) {
         console.error('Error fetching friend list:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -212,7 +212,7 @@ const acceptFriendRequest = async (req, res) => {
     // Verify the token and extract the data
     const data = jwt.verify(token, "keyyy");
     // Now data contains the decoded token payload, including the email
-    const requested_user = data.requested_user;
+    const requested_user = data.userEmail;
     console.log("user requested:", requested_user)
 
     const receiverEmail = req.body.receiverEmail;
