@@ -190,11 +190,10 @@ const rejectFriendRequest = async (req, res) => {
     // Verify the token and extract the data
     const data = jwt.verify(token, "keyyy");
     // Now data contains the decoded token payload, including the email
-    const requested_user = data.requested_user;
-    console.log("user requested:", requested_user)
+    const receiverEmail = data.userEmail;
+    console.log("user requested:", receiverEmail)
 
-    const receiverEmail = req.body.receiverEmail;
-    const senderEmail = req.body.senderEmail;
+    const senderEmail = req.params.id;
 
     const response = await userService.rejectFriendRequest(receiverEmail, senderEmail);
 
@@ -212,11 +211,10 @@ const acceptFriendRequest = async (req, res) => {
     // Verify the token and extract the data
     const data = jwt.verify(token, "keyyy");
     // Now data contains the decoded token payload, including the email
-    const requested_user = data.userEmail;
-    console.log("user requested:", requested_user)
+    const receiverEmail = data.userEmail;
+    console.log("user requested:", receiverEmail)
 
-    const receiverEmail = req.body.receiverEmail;
-    const senderEmail = req.body.senderEmail;
+    const senderEmail = req.params.id;
 
     const response = await userService.acceptFriendRequest(receiverEmail, senderEmail);
 
