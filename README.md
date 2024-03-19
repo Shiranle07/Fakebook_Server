@@ -32,12 +32,8 @@ Start the server using the following command:
 npm start
 ```
 
-### 4. Start the "AP_Project - Ex2 web"
-Make a clone to "AP_Project - Ex2 web" and start the app using the following command:
-
-```bash
-npm start
-```
+### 4. Start the "AP_Project - Ex2 web"/"Faceapp"
+Make a clone to "AP_Project - Ex2 web"/"Faceapp" and start the app using the appropriate command depending on the application you chose to use
 
 ## Workflow
 
