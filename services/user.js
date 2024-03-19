@@ -1,16 +1,13 @@
-// services/user file
-
 const User = require('../models/user');
-const Post = require('../models/post');
 const bcrypt = require('bcrypt');
-const postService = require("../services/post");
 
 
 const addUser = async(firstName, lastName, email, password, photo) => {
     const check = await User.findOne({email});
     if(!check){
         const user = new User({firstName : firstName, lastName : lastName,
-            email : email, password : password, profilePhoto : photo});
+            email : email, password : password});
+        if (photo) user.profilePhoto = photo;
         return await user.save();
     }
     else return null;
@@ -88,25 +85,6 @@ const deleteUser = async (userEmail) => {
         throw error;
     }
 };
-
-// const deleteUser = async(userEmail) => {
-//     const user = await getUserByEmail(userEmail);
-    // if (!user){
-    //     return null; // user not found
-    // }
-
-    // // Get the user's friends
-    // const friendsIds = user.friends.map(friend => friend._id);
-
-    // Get the 20 latest posts from the user's friends
-//     const friendPosts = await Post.find({ user: { $in: friendsIds } })
-//                                     .sort({ publication_date: -1 })
-//                                     .limit(20);
-    
-    
-//     await user.deleteOne();
-//     return "User deleted";
-// };
 
 const authenticateUser = async (email, password) => {
     // Find the user by email

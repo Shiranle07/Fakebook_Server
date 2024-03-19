@@ -1,11 +1,10 @@
 const Post = require('../models/post');
 const User = require('../models/user');
-const userService = require("../services/user");
-
 
 const addPost = async (email, body, photo) => {
     const user = await User.findOne({ email });
     const post = new Post({ user_email: email, user_firstName: user.firstName, user_lastName: user.lastName, user_photo: user.profilePhoto, postBody: body });
+
     if (photo) post.postPhoto = photo;
     return await post.save();
 }
@@ -72,6 +71,7 @@ const getPosts = async (userEmail) => {
         console.error("Error fetching posts:", error);
         throw error;
     }
+
 };
 
 
@@ -95,6 +95,7 @@ const editPost = async (id, postBody, email) => {
 }
 
 const deletePost = async (id, email) => {
+
     const post = await getPostById(id);
     if (!post) {
         return null;
