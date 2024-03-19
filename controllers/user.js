@@ -125,9 +125,9 @@ const getFriendList = async (req, res) => {
         // Call the service to retrieve the friend list
         const friendList = await userService.getFriendList(askingUserEmail, userEmail);
 
-        if (!friendList) {
-            return res.status(404).json({ error: 'Limited access to friend list' });
-        }
+        // if (!friendList) {
+        //     return res.status(404).json({ error: 'Limited access to friend list' });
+        // }
 
         // Return the friend list
         res.json({ friendList });
