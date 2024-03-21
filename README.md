@@ -24,11 +24,11 @@ npm install
 ```
 
 ### 2. Set Up Environment Variables
-Create a `.env` file in the root directory of the project and add the necessary environment variables. For example:
+Create a `.env.local` file in the config folder directory of the project and add the necessary environment variables. For example:
 
 ```
-MONGODB_URI=mongodb://localhost:8080/fakebook
-JWT_SECRET=Fakebook.Fakebook.Fakebook key
+CONNECTION_STRING="mongodb://localhost:27017/Fakebook"
+PORT=8080
 ```
 
 ### 3. Start the Server
