@@ -47,7 +47,7 @@ Clone the repository "AP_Project - Ex2 web"/"Faceapp" and start the app using th
 First, we read the task in its entirety together and checked that we correctly understood what was assigned to us. Together we came up with ideas for implementation in a general way and divided between us the general tasks that we added to JIRA. The first task was to divide the work, we decided that each one work on different task like Web, Android and Server. We used different branches on GitHub for every feature, and merge the branches only after making sure the code works. The code is structured with MCV structure. The server is structured to handle various functionalities of the Fakebook platform, including user management, authentication, friend requests, and post management.
 
 ## Supplementary JSON files for the application database
-# users collection
+### users collection
 [{
   "_id": {
     "$oid": "65f2ee64aabfaf55897bd15b"
@@ -64,7 +64,7 @@ First, we read the task in its entirety together and checked that we correctly u
 }
 
 
-# posts collection
+### posts collection
 
 [{
 {
