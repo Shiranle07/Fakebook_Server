@@ -1,4 +1,3 @@
-[Fakebook.users.json](https://github.com/Shiranle07/Fakebook_Server/files/14705694/Fakebook.users.json)# Fakebook Server
 
 ### Link to Repository
 https://github.com/Shiranle07/Fakebook_Server.git
