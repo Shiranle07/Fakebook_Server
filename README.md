@@ -48,6 +48,7 @@ First, we read the task in its entirety together and checked that we correctly u
 
 ## Supplementary JSON files for the application database
 ### users collection
+```
 [{
   "_id": {
     "$oid": "65f2ee64aabfaf55897bd15b"
@@ -62,10 +63,11 @@ First, we read the task in its entirety together and checked that we correctly u
   "friend_reqs_received": [],
   "__v": 4
 }
-
+```
 
 ### posts collection
 
+```
 [{
 {
   "_id": {
@@ -100,3 +102,4 @@ First, we read the task in its entirety together and checked that we correctly u
   "__v": 0
 }
 }]
+```
