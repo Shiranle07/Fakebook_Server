@@ -1,11 +1,37 @@
 const Post = require('../models/post');
 const User = require('../models/user');
-const userService = require("../services/user");
+const userService = require("./user");
+const bloomService = require("./bloom");
 
+function extractUrls(text) {
+  const regex = /\b((?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(:[0-9]+)?(\/[^\s]*)?\b/g;
+  const matches = [];
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    matches.push(match[0]);
+  }
+  return matches;
+}
 
 const addPost = async (email, body, photo) => {
+
+    const urls = extractUrls(body);
+    if (urls.length > 0) {
+        for (let i = 0; i < urls.length; i++) {
+            console.log("checking url: " + urls[i]);
+            const result = await bloomService.checkUrl(urls[i]);
+            if (result) {
+                console.log("url found in list: " + urls[i]);
+                throw new Error("URL is blocked: " + urls[i]);
+            }
+            console.log("url is OK: " + urls[i]);
+        }
+    }
+
+
     const user = await User.findOne({ email });
     const post = new Post({ user_email: email, user_firstName: user.firstName, user_lastName: user.lastName, user_photo: user.profilePhoto, postBody: body });
+
     if (photo) post.postPhoto = photo;
     return await post.save();
 }
@@ -72,6 +98,7 @@ const getPosts = async (userEmail) => {
         console.error("Error fetching posts:", error);
         throw error;
     }
+
 };
 
 
@@ -80,6 +107,21 @@ const getPostById = async (id) => {
 }
 
 const editPost = async (id, postBody, email) => {
+
+    const urls = extractUrls(postBody);
+    if (urls.length > 0) {
+        for (let i = 0; i < urls.length; i++) {
+            console.log("checking url: " + urls[i]);
+            const result = await bloomService.checkUrl(urls[i]);
+            if (result) {
+                console.log("url found in list: " + urls[i]);
+                throw new Error("URL is blocked: " + urls[i]);
+            }
+            console.log("url is OK: " + urls[i]);
+        }
+    }
+
+    
     const post = await getPostById(id);
     console.log("edited post:", post)
     if (!post) {
@@ -95,6 +137,7 @@ const editPost = async (id, postBody, email) => {
 }
 
 const deletePost = async (id, email) => {
+
     const post = await getPostById(id);
     if (!post) {
         return null;
