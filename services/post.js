@@ -77,10 +77,14 @@ const getPosts = async (userEmail) => {
         // Get the user's friends
         const user = await userService.getUserByEmail(userEmail);
         const friendsIds = user.friends.map(friend => friend._id);
-        // Get the 20 latest posts from the user's friends
-        const friendPosts = await Post.find({ user: { $in: friendsIds } })
-            .sort({ publication_date: -1 })
-            .limit(20);
+        
+        let friendPosts = [];
+        if (friendsIds.length > 0) {
+            // Get the 20 latest posts from the user's friends
+            friendPosts = await Post.find({ user: { $in: friendsIds } })
+                .sort({ publication_date: -1 })
+                .limit(20);
+        }
         // Get the user's posts
         const userPosts = await Post.find({ user: userEmail })
             .sort({ publication_date: -1 })
