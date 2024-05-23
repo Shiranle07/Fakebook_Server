@@ -39,7 +39,10 @@ npm start
 ```
 
 ### 4. Start the "AP_Project - Ex2 web"/"Faceapp"
-Clone the repository "AP_Project - Ex2 web"/"Faceapp" and start the app using the appropriate command depending on the application you chose to use
+Clone the repository "AP_Project - Ex2 web"/"Faceapp" and start the app using the appropriate command depending on the application you chose to use. 
+We recommend logging in with one of our created users to enjoy all that our app has to offer:
+user email: rachel@ww.com
+password: 11112222
 
 ## Workflow
 
