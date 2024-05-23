@@ -5,6 +5,9 @@ const addPost= async(req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const data = jwt.verify(token, "keyyy");
     res.json(await postService.addPost(data.userEmail, req.body.postBody, req.body.postPhoto));
+    // Now data contains the decoded token payload, including the email
+    const userEmail = data.userEmail;
+    res.json(await postService.addPost(userEmail, req.body.postBody, req.body.postPhoto));
 };
 
 const getPosts= async(_, res) => {
