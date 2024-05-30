@@ -76,7 +76,14 @@ const getPosts = async (userEmail) => {
     try {
         // Get the user's friends
         const user = await userService.getUserByEmail(userEmail);
-        const friendsIds = user.friends.map(friend => friend._id);
+        let friendsIds = [];
+        try {
+           friendsIds = user.getFriendList.map(friend => friend._id);
+        }
+        catch (error) {
+            console.error('Error fetching user friends:', error);
+            friendsIds = [];
+        }
         
         let friendPosts = [];
         if (friendsIds.length > 0) {
@@ -86,11 +93,11 @@ const getPosts = async (userEmail) => {
                 .limit(20);
         }
         // Get the user's posts
-        const userPosts = await Post.find({ user: userEmail })
+        const userPosts = await Post.find({ user_email: userEmail })
             .sort({ publication_date: -1 })
             .limit(10);
         // Exclude the user's posts and posts from friends
-        const nonFriendPosts = await Post.find({ user: { $nin: [...friendsIds, userEmail] } })
+        const nonFriendPosts = await Post.find({ user_email: { $nin: [...friendsIds, userEmail] } })
             .sort({ publication_date: -1 })
             .limit(5);
         // Combine all posts
