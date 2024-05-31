@@ -16,10 +16,10 @@ const PostSchema = new Schema({
         type: String,
         required: true
     },
-    // user_photo: {
-    //     type: String,
-    //     required: true
-    // },
+    user_photo: {
+        type: String,
+        required: true
+    },
     postBody: {
         type: String,
         required: true
