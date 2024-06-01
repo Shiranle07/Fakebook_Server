@@ -1,4 +1,4 @@
-
+for targil 4- please look in the repositorys WIKI.
 ### Link to Repository
 https://github.com/Shiranle07/Fakebook_Server.git
 
